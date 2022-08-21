@@ -45,7 +45,7 @@ class TelegramController < Telegram::Bot::UpdatesController
         response = JSON.parse response.gsub('=>', ":")
 
         file_path = response["result"]["file_path"].to_s
-        url_to_send = "https://api.telegram.org/file/bot#{token}/photos/#{file_path}"
+        url_to_send = "https://api.telegram.org/file/bot#{token}/#{file_path}"
         
         message = Message.create(
           chat_id: chat['id'],
