@@ -5,11 +5,13 @@ ChopcastBot is an admin chat-based website enables chopcast admins to interact a
 
 ## Links
 
-[Chopcats](https://t.me/chopcastbot)
+Telegram ChopcatBot: [Chopcast](https://t.me/chopcastbot)
+Admin Portal: [Admin](http://localhost:8080/)  "after finishing the installation guide"
 
 ## Features
 
 - Realtime chat with possible leads and customers from Telegeram.
+- Handling Images sent from Telegram user and show it in admin dashboard.
 - and a lot to be added!
 
 
@@ -35,8 +37,9 @@ Dockerfile if necessary. When ready, simply use the Dockerfile to
 build the image.
 
 ```sh
-cd chopcastBot
-docker-compose up -d
+cd chopcast
+docker-compose up --build "for the first build only"
+docker-compose up -d "after the first build"
 ```
 
 This will run and build the chopcastBot image and start all the services.
@@ -64,3 +67,8 @@ to use it you should import the collection localy from postman app.
 * [Get All Messages](readme/GetAllMessages.md) : `GET /api/messages`
 * [Get User Messages](readme/GetUserMessages.md) : `GET /api/:chat_id/messages`
 * [Post Message to user](readme/PostMessages.md) : `POST /api/:chat_id/messages`
+
+## Enhancements and Development
+
+* The Frontend isn't realtime ----> we should implement sockets between frontend and backend to establish realtime connection.
+* I searched rspecs to dump data and test restapis but didn't had time to do so.
