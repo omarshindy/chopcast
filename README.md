@@ -5,8 +5,8 @@ ChopcastBot is an admin chat-based website enables chopcast admins to interact a
 
 ## Links
 
-Telegram ChopcatBot: [Chopcast](https://t.me/chopcastbot)
-Admin Portal: [Admin](http://localhost:8080/)  "after finishing the installation guide"
+- Telegram ChopcatBot: [Chopcast](https://t.me/chopcastbot)
+- Admin Portal: [Admin](http://localhost:8080/)  "after finishing the installation guide"
 
 ## Features
 
