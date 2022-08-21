@@ -1,8 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@mui/styles';
-import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem'
 import {Chat} from './Chat'
 const useStyles = makeStyles({
     messageArea: {
@@ -22,7 +20,7 @@ export const ChatList = ({chats}) => {
                 {
                     chats.map((chat) => {
                         return (
-                            <Chat key={chat.id} align={chat.admin ? "left" : "right"} text={chat.text} />
+                            <Chat key={chat.id} align={chat.admin ? "left" : "right"} text={chat.text} image={chat.media_link} />
                         )
                     })
                 }

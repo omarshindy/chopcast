@@ -83,7 +83,7 @@ export const Home = () => {
     useEffect(() => {
         setTimeout(() => {
             refresh()
-        }, 30000)
+        }, 60000)
     })
 
     const handleEnter = (e) => {
