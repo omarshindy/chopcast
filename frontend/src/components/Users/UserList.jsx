@@ -18,7 +18,7 @@ export const UserList = ({data}) => {
                     {
                         data.map((user) => {
                             return (
-                                <User name={user.username} id={user.user_id} />
+                                <User key={user.user_id} name={user.username} id={user.user_id} />
                             )
                         })
                     }

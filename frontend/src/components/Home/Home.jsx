@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { makeStyles } from '@mui/styles';
-import useAxios from 'axios-hooks'
 import axios from 'axios'
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
@@ -9,11 +8,11 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper'
 import Fab from '@mui/material/Fab';
 import SendIcon from '@mui/icons-material/Send';
-import {useRecoilState, useRecoilValue} from 'recoil'
+import {useRecoilValue} from 'recoil'
 import {userIdAtom} from '../../atoms'
 import {UserList} from "../Users/UserList"
-import CircularProgress from '@mui/material/CircularProgress';
 import {ChatList} from '../Chats/ChatList'
+import RefreshIcon from '@mui/icons-material/Refresh';
 const useStyles = makeStyles({
     table: {
       minWidth: 650,
@@ -44,15 +43,24 @@ export const Home = () => {
     const [users, setUsers] = useState([])
 
     const fetchUsers = () => {
-        axios.get("http://localhost:3000/api/users").then((res) => {
+        axios.get("/api/users").then((res) => {
             setUsers(res.data)
         })
     }
 
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        const offsetBottom = messagesEndRef.current.offsetTop + ref.current.offsetHeight;
+        window.scrollTo({ top: offsetBottom });
+  
+    }
+
     const fetchMessage = () => {
-        axios.get("http://localhost:3000/api/" + userId + "/messages")
+        axios.get("/api/" + userId + "/messages")
             .then((res) => {
                 setMessages(res.data)
+                scrollToBottom()
             })
     }
 
@@ -67,69 +75,62 @@ export const Home = () => {
         setMessage(e.target.value)
     }
 
+    const refresh = () => {
+        fetchMessage()
+        fetchUsers()
+    }
+
     useEffect(() => {
         setTimeout(() => {
-            fetchMessage()
-            fetchUsers()
+            refresh()
         }, 30000)
     })
 
+    const handleEnter = (e) => {
+        if (e.keyCode === 13){
+            handleSubmit()
+        }
+    }
+
     const handleSubmit = () => {
-        axios.post("http://localhost:3000/api/respond", {
+        axios.post("/api/respond", {
             "chat_id": userId,
             "text": message
         }).then((res) => {
-            console.log("res: ", res)
             setMessage("")
             fetchMessage()
         })
-
-
-
     }
 
-    // if (loading) return <div><CircularProgress/></div>
-    // if (error) return <h1>{error}</h1>
-    // const spinner = <CircularProgress/>
     return (
         <div>
             <Grid container>
-              <Grid item xs={12} >
-                  <Typography variant="h5" className="header-message">Chat</Typography>
+            
+              <Grid item xs={3} >
+                 <Grid container>
+                    <Grid item xs={6} style={{ flexGrow: "1" }}> 
+                        <Typography variant="h5" align="left">Chat</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography variant="h5" align="right" sx={{
+                            paddingRight: '25px'
+                        }}> 
+                            <RefreshIcon onClick= {(refresh)}  />
+                        </Typography>
+                    </Grid>
+                 </Grid>
               </Grid>
           </Grid>
+          
         <Grid container component={Paper} className={classes.chatSection}>
              <UserList data={users}/>
             <Grid item xs={9}>
-                <ChatList chats={messages}/>
-                {/*<List className={classes.messageArea}>*/}
-
-                {/*    <ListItem key="2">*/}
-                {/*        <Grid container>*/}
-                {/*            <Grid item xs={12}>*/}
-                {/*                <ListItemText align="left" primary="Hey, Iam Good! What about you ?"></ListItemText>*/}
-                {/*            </Grid>*/}
-                {/*            <Grid item xs={12}>*/}
-                {/*                <ListItemText align="left" secondary="09:31"></ListItemText>*/}
-                {/*            </Grid>*/}
-                {/*        </Grid>*/}
-                {/*    </ListItem>*/}
-                {/*    <ListItem key="3">*/}
-                {/*        <Grid container>*/}
-                {/*            <Grid item xs={12}>*/}
-                {/*                <ListItemText align="right" primary="Cool. i am good, let's catch up!"></ListItemText>*/}
-                {/*            </Grid>*/}
-                {/*            <Grid item xs={12}>*/}
-                {/*                <ListItemText align="right" secondary="10:30"></ListItemText>*/}
-                {/*            </Grid>*/}
-                {/*        </Grid>*/}
-                {/*    </ListItem>*/}
-                {/*</List>*/}
+                <ChatList ref={messagesEndRef} chats={messages}/>
                 <Divider />
 
                 <Grid container style={{padding: '20px'}}>
                     <Grid item xs={11}>
-                        <TextField id="outlined-basic-email" label="Type Something" fullWidth onChange={handleChange} value={message} />
+                        <TextField id="outlined-basic-email" label="Type Something" fullWidth onChange={handleChange} onKeyDown={handleEnter} value={message} />
                     </Grid>
                     <Grid xs={1} align="right">
                         <Fab color="primary" aria-label="add" onClick={handleSubmit}><SendIcon /></Fab>
@@ -140,4 +141,3 @@ export const Home = () => {
     </div>
     );
 }
-

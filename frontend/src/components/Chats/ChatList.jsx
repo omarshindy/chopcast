@@ -22,7 +22,7 @@ export const ChatList = ({chats}) => {
                 {
                     chats.map((chat) => {
                         return (
-                            <Chat align={chat.admin ? "left" : "right"} text={chat.text} />
+                            <Chat key={chat.id} align={chat.admin ? "left" : "right"} text={chat.text} />
                         )
                     })
                 }
